@@ -25,6 +25,6 @@ namespace JagerGroupIS.Models.Database
 
         public virtual Election? Election { get; set; }
 
-        public virtual User? User { get; set; } 
+        public virtual User? User { get; set; }
     }
 }
