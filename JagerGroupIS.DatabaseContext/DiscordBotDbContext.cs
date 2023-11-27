@@ -12,17 +12,17 @@ namespace JagerGroupIS.DatabaseContext
 {
     public class DiscordBotDbContext : DbContext
     {
-        public virtual DbSet<Election> Elections { get; set; }
+        //public virtual DbSet<Election> Elections { get; set; }
 
-        public virtual DbSet<RoleElectionSetup> RoleElectionSetups { get; set;}
+        //public virtual DbSet<RoleElectionSetup> RoleElectionSetups { get; set;}
 
         public virtual DbSet<User> Users { get; set; }
 
-        public virtual DbSet<Vote> Votes { get; set; }
+        //public virtual DbSet<Vote> Votes { get; set; }
 
-        public virtual DbSet<TrackingMessage> TrackingMessages { get; set; }
+        //public virtual DbSet<TrackingMessage> TrackingMessages { get; set; }
 
-        public string ConnectionString { get; }
+        public string ConnectionString { get; set; }
 
         ILoggerFactory loggerFactory { get; set; }
 
@@ -30,11 +30,20 @@ namespace JagerGroupIS.DatabaseContext
         {
             ConnectionString = connectionString;
             loggerFactory = LoggerFactory.Create(builder => { builder.AddConsole(); });
+
+
+            Database.EnsureDeleted();
+
+            Database.EnsureCreated();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if(optionsBuilder.IsConfigured == false)
+            ConnectionString = "User=SYSDBA;Password=masterkey;Database=/databases/TESTDB.FDB;DataSource=localhost;Port=3050;";
+
+            base.OnConfiguring(optionsBuilder);
+
+            if (optionsBuilder.IsConfigured == false)
             {
                 optionsBuilder.UseFirebird(ConnectionString)
                               .UseLoggerFactory(loggerFactory)
@@ -42,5 +51,9 @@ namespace JagerGroupIS.DatabaseContext
             }
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

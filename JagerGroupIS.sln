@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JagerGroupIS.DiscordBot", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JagerGroupIS.DatabaseContext", "JagerGroupIS.DatabaseContext\JagerGroupIS.DatabaseContext.csproj", "{31EB72FB-99AA-4261-AE5B-1020D53189C8}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{0DF19F6A-CE48-403B-A3D2-51DEE463DF25}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{31EB72FB-99AA-4261-AE5B-1020D53189C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31EB72FB-99AA-4261-AE5B-1020D53189C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31EB72FB-99AA-4261-AE5B-1020D53189C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DF19F6A-CE48-403B-A3D2-51DEE463DF25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DF19F6A-CE48-403B-A3D2-51DEE463DF25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DF19F6A-CE48-403B-A3D2-51DEE463DF25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DF19F6A-CE48-403B-A3D2-51DEE463DF25}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

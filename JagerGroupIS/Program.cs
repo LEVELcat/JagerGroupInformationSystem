@@ -1,3 +1,7 @@
+using JagerGroupIS.DatabaseContext;
+using JagerGroupIS.DiscordBot;
+using System.Globalization;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -19,5 +23,12 @@ if (app.Environment.IsDevelopment())
 app.UseAuthorization();
 
 app.MapControllers();
+
+//DiscordBot.AsyncMain(args);
+
+using (DiscordBotDbContext discordBot = new DiscordBotDbContext("test"))
+{
+    Console.WriteLine("Hello World");
+}
 
 app.Run();
