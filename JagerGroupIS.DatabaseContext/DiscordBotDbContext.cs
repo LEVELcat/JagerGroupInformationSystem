@@ -36,13 +36,13 @@ namespace JagerGroupIS.DatabaseContext
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            ConnectionString = "User=SYSDBA;Password=masterkey;Database=/databases/NEWTEST2.FDB;DataSource=172.28.0.2;Port=3050;Packet Size=8192;";
+            ConnectionString = "Host=172.21.0.2;Port=5432;Database=jagerdb;Username=postgres;Password=qwe123qwe";
 
             base.OnConfiguring(optionsBuilder);
 
             if (optionsBuilder.IsConfigured == false)
             {
-                optionsBuilder.UseFirebird(ConnectionString)
+                optionsBuilder.UseNpgsql(ConnectionString)
                               .UseLoggerFactory(loggerFactory)
                               .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             }

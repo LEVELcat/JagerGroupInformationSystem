@@ -30,15 +30,7 @@ using (DiscordBotDbContext discordBot = new DiscordBotDbContext("test"))
 {
     //discordBot.Database.EnsureDeleted();
 
-    //discordBot.SaveChanges();
-
-    //discordBot.Database.CommitTransaction();
-
     discordBot.Database.EnsureCreated();
-
-    //discordBot.SaveChanges();
-
-    //var users = discordBot.Users.ToArray();
 
     Console.WriteLine("Hello World");
 }

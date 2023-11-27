@@ -11,10 +11,10 @@ namespace JagerGroupIS.Models.Database
         public int ID { get; set; }
 
         [Column("DiscordMemberID")]
-        public string? MemberID { get; set; }
+        public long? MemberID { get; set; }
 
         [Column("Steam64ID")]
-        public string? Steam64ID { get; set; }
+        public long? Steam64ID { get; set; }
 
         public virtual ICollection<Vote> Votes { get; set; }
     }

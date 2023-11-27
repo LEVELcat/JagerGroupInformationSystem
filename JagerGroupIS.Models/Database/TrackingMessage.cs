@@ -17,13 +17,13 @@ namespace JagerGroupIS.Models.Database
         public int ID { get; set; }
 
         [Column("GuildID")]
-        public string GuildID { get; set; }
+        public long GuildID { get; set; }
 
         [Column("ChanelID")]
-        public string ChanelID { get; set; }
+        public long ChanelID { get; set; }
 
         [Column("MessageID")]
-        public string MessageID { get; set; }
+        public long MessageID { get; set; }
 
         [Column("RefreshTime")]
         public TimeSpan RefreshTime {  get; set; }

@@ -1,26 +1,19 @@
 version: '3.9'
 
 services:
-  firebird:
-    image: controlsoft/firebird
+  postgres:
+    image: postgres
     # restart: always
-    container_name: firebird
+    container_name: postgres
     ports:
-      - 3050:3050
-      - 3051:3051
+      - 5432:5432
     volumes:
       - C:\databases:/databases # Windows
       - /home/user/databases:/databases # Linux
     environment:
-      - PASSWORD=masterkey
+       POSTGRES_PASSWORD: qwe123qwe
     networks:
-      - fbnet
-      
-    # healthcheck:
-    #   test: ["CMD-SHELL", "gstat"]
-    #   interval: 10s
-    #   timeout: 5s
-    #   retries: 3
+      - psnet
 
   jagergroupis:
     image: ${DOCKER_REGISTRY-}jagergroupis
@@ -33,29 +26,8 @@ services:
       LC_ALL: ru_RU.UTF-8
       TZ: Europe/Moscow
     networks:
-      - fbnet
+      - psnet
 
 networks:
-  fbnet:
+  psnet:
     driver: bridge
-
-    # depends_on:
-    #   firebird: 
-    #     condition: service_healthy
-
-  # postgres:
-  #   image: postgres:latest
-  #   restart: always
-  #   environment:
-  #     POSTGRES_DB: testdb
-  #     POSTGRES_USER: admin
-  #     POSTGRES_PASSWORD: admin
-  #   healthcheck:
-  #     test: ["CMD-SHELL", "pg_isready --dbname=testdb --username=admin"]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 3
-  #   ports:
-  #     - "5432:5432"
-
-
