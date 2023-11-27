@@ -23,13 +23,13 @@ namespace JagerGroupIS.Models.Database
         public DateTime EndTime { get; set; }
 
         [Column("GuildID")]
-        public ulong GuildID { get; set; }
+        public string GuildID { get; set; }
 
         [Column("ChanelID")]
-        public ulong ChanelID { get; set; }
+        public string ChanelID { get; set; }
 
         [Column("MessageID")]
-        public ulong MessageID { get; set; }
+        public string MessageID { get; set; }
 
         [Column("SettingsMask")]
         public ElectionSettingsBitMask Settings { get; set; }

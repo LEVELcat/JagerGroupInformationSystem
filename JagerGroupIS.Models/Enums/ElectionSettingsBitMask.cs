@@ -1,7 +1,7 @@
 ﻿namespace JagerGroupIS.Models.Enums
 {
     [Flags]
-    public enum ElectionSettingsBitMask : ulong
+    public enum ElectionSettingsBitMask : long
     {
         None = 0x0, //0
         AgreeList = 0x1, // 1,

@@ -14,7 +14,7 @@ namespace JagerGroupIS.Models.Database
         public int ElectionID { get; set; }
 
         [Column("RoleID")]
-        public ulong DisordRoleID { get; set; }
+        public string DisordRoleID { get; set; }
 
         [Column("IsTakingPart")]
         public bool IsTackingPart { get; set; }

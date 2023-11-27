@@ -3,7 +3,7 @@ version: '3.9'
 services:
   firebird:
     image: controlsoft/firebird
-    restart: always
+    # restart: always
     container_name: firebird
     ports:
       - 3050:3050
@@ -13,6 +13,9 @@ services:
       - /home/user/databases:/databases # Linux
     environment:
       - PASSWORD=masterkey
+    networks:
+      - fbnet
+      
     # healthcheck:
     #   test: ["CMD-SHELL", "gstat"]
     #   interval: 10s
@@ -29,6 +32,13 @@ services:
       LANG: ru_RU.UTF-8
       LC_ALL: ru_RU.UTF-8
       TZ: Europe/Moscow
+    networks:
+      - fbnet
+
+networks:
+  fbnet:
+    driver: bridge
+
     # depends_on:
     #   firebird: 
     #     condition: service_healthy

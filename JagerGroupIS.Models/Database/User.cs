@@ -3,19 +3,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace JagerGroupIS.Models.Database
 {
-    //[Table("User")]
+    [Table("User")]
     public class User
     {
-        //[Key]
-        //[Column("UserID")]
+        [Key]
+        [Column("UserID")]
         public int ID { get; set; }
 
-        //[Column("DiscordMemberID")]
-        public ulong? MemberID { get; set; }
+        [Column("DiscordMemberID")]
+        public string? MemberID { get; set; }
 
-        //[Column("Steam64ID")]
-        public ulong? Steam64ID { get; set; }
+        [Column("Steam64ID")]
+        public string? Steam64ID { get; set; }
 
-        //public virtual ICollection<Vote> Votes { get; set; }
+        public virtual ICollection<Vote> Votes { get; set; }
     }
 }
