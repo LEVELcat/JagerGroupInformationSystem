@@ -22,21 +22,23 @@ namespace JagerGroupIS.DatabaseContext
 
         public virtual DbSet<TrackingMessage> TrackingMessages { get; set; }
 
+        public virtual DbSet<DiscordToken> DiscordTokens { get; set; }
+
+        public virtual DbSet<AccessTable> AccessTables { get; set; }
+
         public string ConnectionString { get; set; }
 
         ILoggerFactory loggerFactory { get; set; }
 
-        public DiscordBotDbContext(string connectionString)
+        public DiscordBotDbContext()
         {
-            ConnectionString = connectionString;
+            ConnectionString = "Host=172.19.0.2;Port=5432;Database=jagerdb;Username=postgres;Password=qwe123qwe";
+
             loggerFactory = LoggerFactory.Create(builder => { builder.AddConsole(); });
-
-
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            ConnectionString = "Host=172.21.0.2;Port=5432;Database=jagerdb;Username=postgres;Password=qwe123qwe";
 
             base.OnConfiguring(optionsBuilder);
 
@@ -46,8 +48,6 @@ namespace JagerGroupIS.DatabaseContext
                               .UseLoggerFactory(loggerFactory)
                               .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             }
-
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -8,7 +8,7 @@
         RejectList = 0x2, // 2,
         NotVotedList = 0x4, // 4,
         NotificationForAgree = 0x8, // 8,
-        NotificationFroNotVoted = 0x10, // 16,
+        NotificationForNotVoted = 0x10, // 16,
 
 
         NotificationBefore_1Mounth = 0x20000000000000, // 9007199254740992,

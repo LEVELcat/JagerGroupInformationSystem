@@ -17,7 +17,7 @@ services:
 
   jagergroupis:
     image: ${DOCKER_REGISTRY-}jagergroupis
-    restart: always
+    # restart: always
     build:
       context: .
       dockerfile: JagerGroupIS/Dockerfile

@@ -11,6 +11,10 @@ using DSharpPlus.CommandsNext;
 using DSharpPlus.AsyncEvents;
 using DSharpPlus.EventArgs;
 using System.Reflection;
+using JagerGroupIS.DiscordBot.Modules.Election;
+using JagerGroupIS.DatabaseContext;
+using JagerGroupIS.DiscordBot.Services;
+using DSharpPlus.SlashCommands;
 
 namespace JagerGroupIS.DiscordBot
 {
@@ -29,7 +33,7 @@ namespace JagerGroupIS.DiscordBot
                 //TODO: Put Into Config file
                 var config = new DiscordConfiguration()
                 {
-                    Token = "token",
+                    Token = args.First(),
 
                     TokenType = TokenType.Bot,
                     Intents = DiscordIntents.All,
@@ -38,19 +42,29 @@ namespace JagerGroupIS.DiscordBot
                 };
 
                 var discord = new DiscordClient(config);
-                discord.UseInteractivity(new InteractivityConfiguration());
 
                 IServiceCollection serviceCollection = new ServiceCollection();
+
+                serviceCollection.AddTransient<DiscordBotDbContext>();
+                serviceCollection.AddTransient<ElectionResponce>();
+
                 //serviceCollection.AddTransient<ElectionResponce>();
                 //serviceCollection.AddSingleton<ElectionSingleton>();
+
                 var services = serviceCollection.BuildServiceProvider();
 
-
-                var commands = discord.UseCommandsNext(new CommandsNextConfiguration()
+                var shash = discord.UseSlashCommands(new SlashCommandsConfiguration()
                 {
-                    StringPrefixes = new[] { "!" },
                     Services = services
                 });
+
+                shash.RegisterCommands<ElectionModule>();
+
+                discord.UseInteractivity(new InteractivityConfiguration()
+                {
+
+                });
+
 
                 discord.ComponentInteractionCreated += RegistrateInteractionEvent(services);
 
@@ -74,8 +88,8 @@ namespace JagerGroupIS.DiscordBot
             {
                 if (itteraction.Id.StartsWith("EL_"))
                 {
-                    //if (services.GetService<Modules.ElectionModuleClasses.ElectionResponce>() is Modules.ElectionModuleClasses.ElectionResponce electionResponce)
-                    //    electionResponce.Responce(itteraction);
+                    if (services.GetService<ElectionResponce>() is ElectionResponce electionResponce)
+                        electionResponce.Responce(itteraction);
                 }
                 else
                 {

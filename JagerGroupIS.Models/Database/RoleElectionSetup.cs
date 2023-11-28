@@ -17,7 +17,7 @@ namespace JagerGroupIS.Models.Database
         public long DisordRoleID { get; set; }
 
         [Column("IsTakingPart")]
-        public bool IsTackingPart { get; set; }
+        public bool IsTakingPart { get; set; }
 
         public virtual Election? Election { get; set; }
     }

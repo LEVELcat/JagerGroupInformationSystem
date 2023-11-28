@@ -17,10 +17,10 @@ namespace JagerGroupIS.Models.Database
         public int ID { get; set; }
 
         [Column("StartTimeUTC")]
-        public DateTime StartTime { get; set; }
+        public DateTime StartTimeUTC { get; set; }
 
         [Column("EndTimeUTC")]
-        public DateTime EndTime { get; set; }
+        public DateTimeOffset EndTimeUTC { get; set; }
 
         [Column("GuildID")]
         public long GuildID { get; set; }
@@ -34,8 +34,23 @@ namespace JagerGroupIS.Models.Database
         [Column("SettingsMask")]
         public ElectionSettingsBitMask Settings { get; set; }
 
-        public virtual ICollection<Vote> Votes { get; set; }
+        public virtual ICollection<Vote>? Votes { get; set; }
 
-        public virtual ICollection<RoleElectionSetup> RoleSetups { get; set; }
+        public virtual ICollection<RoleElectionSetup>? RoleSetups { get; set; }
+
+
+        [NotMapped]
+        public DateTimeOffset EndTime
+        {
+            get { return EndTimeUTC.ToLocalTime(); }
+            set { EndTimeUTC = value.UtcDateTime; }
+        }
+
+        [NotMapped]
+        public DateTimeOffset StartTime
+        {
+            get { return StartTimeUTC.ToLocalTime(); }
+            set { StartTimeUTC = value.UtcDateTime; }
+        }
     }
 }

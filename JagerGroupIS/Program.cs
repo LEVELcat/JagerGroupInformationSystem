@@ -11,6 +11,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddDbContext<DiscordBotDbContext>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -24,15 +26,19 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-//DiscordBot.AsyncMain(args);
+string[] token = null;
 
-using (DiscordBotDbContext discordBot = new DiscordBotDbContext("test"))
+using (DiscordBotDbContext discordBot = new DiscordBotDbContext())
 {
     //discordBot.Database.EnsureDeleted();
 
-    discordBot.Database.EnsureCreated();
+    //discordBot.Database.EnsureCreated();
 
-    Console.WriteLine("Hello World");
+    token = discordBot.DiscordTokens.Select(x => x.Token).ToArray();
 }
+
+DiscordBot.AsyncMain(token);
+
+var client = DiscordBot.Client;
 
 app.Run();

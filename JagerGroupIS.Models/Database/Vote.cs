@@ -21,10 +21,18 @@ namespace JagerGroupIS.Models.Database
         public VoteType VoteType { get; set; }
 
         [Column("VoteTimeUTC")]
-        public DateTime VoteTime { get; set; }
+        public DateTime VoteTimeUTC { get; set; }
 
         public virtual Election? Election { get; set; }
 
         public virtual User? User { get; set; }
+
+
+        [NotMapped]
+        public DateTimeOffset VoteTime
+        {
+            get { return VoteTimeUTC.ToLocalTime(); }
+            set { VoteTimeUTC = value.UtcDateTime; }
+        }
     }
 }
