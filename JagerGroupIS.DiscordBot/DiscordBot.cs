@@ -48,7 +48,7 @@ namespace JagerGroupIS.DiscordBot
 
                     TokenType = TokenType.Bot,
                     Intents = DiscordIntents.All,
-                    MinimumLogLevel = LogLevel.Trace,
+                    MinimumLogLevel = LogLevel.Debug,
                     //LogTimestampFormat = "MMM dd yyyy - hh:mm:ss tt",
                     //LoggerFactory = logFactory
                 };
