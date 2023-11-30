@@ -67,7 +67,7 @@ namespace JagerGroupIS.DiscordBot.Services
                     await dbContext.Users.AddAsync(user);
                     await dbContext.SaveChangesAsync();
                 }
-                Vote? lastVote = election.Votes.LastOrDefault(v => v.User.ID == user.ID);
+                Vote? lastVote = election.Votes.OrderBy(x => x.VoteTimeUTC).LastOrDefault(v => v.User.ID == user.ID);
 
                 switch (componentInteraction.Id)
                 {
@@ -220,7 +220,7 @@ namespace JagerGroupIS.DiscordBot.Services
                                select new { Id = unchecked((long)m.Value.Id), m.Value.Mention }).ToList();
                  
                 var votes = await dbContext.Votes.Where(v => v.ElectionID == election.ID)
-                                                 .OrderBy(v => v.ID)
+                                                 .OrderBy(v => v.VoteTimeUTC)
                                                  .GroupBy(x => x.UserID)
                                                  .ToArrayAsync();
                  
