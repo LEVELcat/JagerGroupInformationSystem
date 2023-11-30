@@ -5,8 +5,8 @@ volumes:
 
 services:
   postgres:
-    image: postgres
-    # restart: always
+    image: postgres:16.1
+    restart: unless-stopped
     container_name: postgres
     ports:
       - 5432:5432
@@ -17,16 +17,23 @@ services:
     networks:
       psnet:
         ipv4_address: 10.5.0.5
+    healthcheck:
+      test: ["CMD", "sudo systemctl status postgresql"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
 
   jagergroupis:
     image: ${DOCKER_REGISTRY-}jagergroupis
-    # restart: always
+    restart: unless-stopped
     build:
       context: .
       dockerfile: JagerGroupIS/Dockerfile
     environment:
-      # LANG: ru_RU.UTF-8
-      # LC_ALL: ru_RU.UTF-8
+      LANG: ru_RU.UTF-8
+      LC_ALL: ru_RU.UTF-8
       TZ: Europe/Moscow
     networks:
       - psnet
@@ -34,6 +41,12 @@ services:
       - postgres
     links:
       - postgres 
+    healthcheck:
+      test: ["CMD", "hostname", "-i"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
 networks:
   psnet:
