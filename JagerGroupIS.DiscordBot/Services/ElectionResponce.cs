@@ -22,9 +22,6 @@ namespace JagerGroupIS.DiscordBot.Services
         {
             try
             {
-
-
-
                 var guidIDlong = unchecked((long)componentInteraction.Guild.Id);
                 var channelIDlong = unchecked((long)componentInteraction.Channel.Id);
                 var messageIDlong = unchecked((long)componentInteraction.Message.Id);
@@ -35,6 +32,9 @@ namespace JagerGroupIS.DiscordBot.Services
                                                                                        e.MessageID == messageIDlong);
 
                 if (election == null)
+                    return;
+
+                if (election.EndTimeUTC < DateTime.UtcNow)
                     return;
 
                 var includedRolesID = election.RoleSetups.Where(x => x.IsTakingPart == true).Select(x => x.DisordRoleID).Select(x => unchecked((ulong)x));

@@ -18,7 +18,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<DiscordBotDbContext>();
+builder.Services.AddTransient<DiscordBotDbContext>();
 
 var app = builder.Build();
 
