@@ -58,7 +58,7 @@ namespace JagerGroupIS.DiscordBot
 
                 IServiceCollection serviceCollection = new ServiceCollection();
 
-                serviceCollection.AddDbContext<DiscordBotDbContext>();
+                serviceCollection.AddTransient<DiscordBotDbContext>();
                 serviceCollection.AddTransient<ElectionResponce>();
 
                 var services = serviceCollection.BuildServiceProvider();
