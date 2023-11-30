@@ -1,5 +1,8 @@
 version: '3.9'
 
+volumes:
+  db:
+
 services:
   postgres:
     image: postgres
@@ -8,12 +11,12 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - C:\databases:/databases # Windows
-      - /home/user/databases:/databases # Linux
+      - db:/var/lib/postgresql/data
     environment:
        POSTGRES_PASSWORD: qwe123qwe
     networks:
-      - psnet
+      psnet:
+        ipv4_address: 10.5.0.5
 
   jagergroupis:
     image: ${DOCKER_REGISTRY-}jagergroupis
@@ -27,7 +30,15 @@ services:
       TZ: Europe/Moscow
     networks:
       - psnet
+    depends_on:
+      - postgres
+    links:
+      - postgres 
 
 networks:
   psnet:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 10.5.0.0/16
+          gateway: 10.5.0.1

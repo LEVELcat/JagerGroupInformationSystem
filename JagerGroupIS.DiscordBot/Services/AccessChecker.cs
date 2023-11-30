@@ -8,32 +8,32 @@ using System.Threading.Tasks;
 
 namespace JagerGroupIS.DiscordBot.Services
 {
-    public class AccessChecker
-    {
-        DiscordBotDbContext dbContext;
+    //public class AccessChecker
+    //{
+    //    DiscordBotDbContext dbContext;
 
-        public AccessChecker(DiscordBotDbContext dbContext)
-        {
-            this.dbContext = dbContext;
-        }
+    //    public AccessChecker(DiscordBotDbContext dbContext)
+    //    {
+    //        this.dbContext = dbContext;
+    //    }
 
-        public bool CheckAccess(DiscordMember discordMember)
-        {
-            if (discordMember.IsOwner)
-                return true;
+    //    public bool CheckAccess(DiscordMember discordMember)
+    //    {
+    //        if (discordMember.IsOwner)
+    //            return true;
 
-            long guildID = unchecked((long)discordMember.Guild.Id);
+    //        long guildID = unchecked((long)discordMember.Guild.Id);
 
-            var rolesIDs = discordMember.Roles.Select(x => x.Id);
+    //        var rolesIDs = discordMember.Roles.Select(x => x.Id);
 
-            var access = dbContext.AccessTables.Where(x => x.GuildID == guildID)
-                                               .Select(x => x.RoleID)
-                                               .Select(x => unchecked((ulong)x));
+    //        var access = dbContext.AccessTables.Where(x => x.GuildID == guildID)
+    //                                           .Select(x => x.RoleID)
+    //                                           .Select(x => unchecked((ulong)x));
 
-            if (rolesIDs.Any(x => rolesIDs.Contains(x)))
-                return true;
+    //        if (rolesIDs.Any(x => rolesIDs.Contains(x)))
+    //            return true;
 
-            return false;
-        }
-    }
+    //        return false;
+    //    }
+    //}
 }

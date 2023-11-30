@@ -15,6 +15,8 @@ using JagerGroupIS.DiscordBot.Modules.Election;
 using JagerGroupIS.DatabaseContext;
 using JagerGroupIS.DiscordBot.Services;
 using DSharpPlus.SlashCommands;
+using Microsoft.Extensions.Configuration;
+using JagerGroupIS.Models.Config;
 
 namespace JagerGroupIS.DiscordBot
 {
@@ -22,18 +24,18 @@ namespace JagerGroupIS.DiscordBot
     {
         public static DiscordClient Client { get ; private set; }
 
-        public static void Main(string[] args) => AsyncMain(args).GetAwaiter().GetResult() ;
+        //public static void Main(string[] args) => AsyncMain(args).GetAwaiter().GetResult() ;
 
         public static void Close() => Client.DisconnectAsync().GetAwaiter().GetResult();
 
-        public static async Task AsyncMain(string[] args)
+        public static async Task AsyncMain(ConfigurationManager configurationManager)
         {
             try
             {
                 //TODO: Put Into Config file
                 var config = new DiscordConfiguration()
                 {
-                    Token = args.First(),
+                    Token = configurationManager.Get<DiscordToken>().Value,
 
                     TokenType = TokenType.Bot,
                     Intents = DiscordIntents.All,
@@ -45,11 +47,9 @@ namespace JagerGroupIS.DiscordBot
 
                 IServiceCollection serviceCollection = new ServiceCollection();
 
-                serviceCollection.AddTransient<DiscordBotDbContext>();
+                serviceCollection.AddSingleton(configurationManager.Get<ConnectionString>());
+                serviceCollection.AddDbContext<DiscordBotDbContext>();
                 serviceCollection.AddTransient<ElectionResponce>();
-
-                //serviceCollection.AddTransient<ElectionResponce>();
-                //serviceCollection.AddSingleton<ElectionSingleton>();
 
                 var services = serviceCollection.BuildServiceProvider();
 

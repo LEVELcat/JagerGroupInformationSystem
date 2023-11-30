@@ -1,4 +1,5 @@
-﻿using JagerGroupIS.Models.Database;
+﻿using JagerGroupIS.Models.Config;
+using JagerGroupIS.Models.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -22,32 +23,31 @@ namespace JagerGroupIS.DatabaseContext
 
         public virtual DbSet<TrackingMessage> TrackingMessages { get; set; }
 
-        public virtual DbSet<DiscordToken> DiscordTokens { get; set; }
-
-        public virtual DbSet<AccessTable> AccessTables { get; set; }
-
-        public string ConnectionString { get; set; }
+        public ConnectionString ConnectionString { get; set; }
 
         ILoggerFactory loggerFactory { get; set; }
 
-        public DiscordBotDbContext()
+        public DiscordBotDbContext(ConnectionString ConnectionString)
         {
-            ConnectionString = "Host=172.19.0.2;Port=5432;Database=jagerdb;Username=postgres;Password=qwe123qwe";
+            this.ConnectionString = ConnectionString;
 
             loggerFactory = LoggerFactory.Create(builder => { builder.AddConsole(); });
+
+            Database.EnsureCreated();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-
-            base.OnConfiguring(optionsBuilder);
+            optionsBuilder.UseLazyLoadingProxies();
 
             if (optionsBuilder.IsConfigured == false)
             {
-                optionsBuilder.UseNpgsql(ConnectionString)
+                optionsBuilder.UseNpgsql(ConnectionString.ToString())
                               .UseLoggerFactory(loggerFactory)
                               .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             }
+
+            base.OnConfiguring(optionsBuilder);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

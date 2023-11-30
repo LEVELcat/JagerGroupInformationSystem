@@ -34,10 +34,9 @@ namespace JagerGroupIS.Models.Database
         [Column("SettingsMask")]
         public ElectionSettingsBitMask Settings { get; set; }
 
-        public virtual ICollection<Vote>? Votes { get; set; }
-
         public virtual ICollection<RoleElectionSetup>? RoleSetups { get; set; }
 
+        public virtual ICollection<Vote>? Votes { get; set; }
 
         [NotMapped]
         public DateTimeOffset EndTime

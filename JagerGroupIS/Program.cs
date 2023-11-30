@@ -1,10 +1,15 @@
 using JagerGroupIS.DatabaseContext;
 using JagerGroupIS.DiscordBot;
+using JagerGroupIS.Models.Config;
 using System.Globalization;
+using System.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.Configure<ConnectionString>(builder.Configuration.GetSection("ConnectionStrings"));
+builder.Services.Configure<DiscordToken>(builder.Configuration.GetSection("DiscordToken"));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -26,19 +31,10 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-string[] token = null;
-
-using (DiscordBotDbContext discordBot = new DiscordBotDbContext())
-{
-    //discordBot.Database.EnsureDeleted();
-
-    //discordBot.Database.EnsureCreated();
-
-    token = discordBot.DiscordTokens.Select(x => x.Token).ToArray();
-}
-
-DiscordBot.AsyncMain(token);
+DiscordBot.AsyncMain(builder.Configuration);
 
 var client = DiscordBot.Client;
 
 app.Run();
+
+DiscordBot.Close();
