@@ -47,7 +47,7 @@ namespace JagerGroupIS.DiscordBot.Services
 
                 Console.WriteLine("ER#" + inde++);
 
-                if (election.EndTimeUTC < DateTime.UtcNow)
+                if (election.EndTimeUTC.CompareTo(DateTimeOffset.UtcNow) > 1)
                     return;
 
                 Console.WriteLine("ER#" + inde++);
