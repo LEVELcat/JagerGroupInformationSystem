@@ -16,7 +16,6 @@ using JagerGroupIS.DatabaseContext;
 using JagerGroupIS.DiscordBot.Services;
 using DSharpPlus.SlashCommands;
 using Microsoft.Extensions.Configuration;
-using JagerGroupIS.Models.Config;
 
 namespace JagerGroupIS.DiscordBot
 {
@@ -35,7 +34,7 @@ namespace JagerGroupIS.DiscordBot
                 //TODO: Put Into Config file
                 var config = new DiscordConfiguration()
                 {
-                    Token = configurationManager.Get<DiscordToken>().Value,
+                    Token = configurationManager.GetValue<string>("DiscordToken"),
 
                     TokenType = TokenType.Bot,
                     Intents = DiscordIntents.All,
@@ -47,7 +46,6 @@ namespace JagerGroupIS.DiscordBot
 
                 IServiceCollection serviceCollection = new ServiceCollection();
 
-                serviceCollection.AddSingleton(configurationManager.Get<ConnectionString>());
                 serviceCollection.AddDbContext<DiscordBotDbContext>();
                 serviceCollection.AddTransient<ElectionResponce>();
 

@@ -1,5 +1,4 @@
-﻿using JagerGroupIS.Models.Config;
-using JagerGroupIS.Models.Database;
+﻿using JagerGroupIS.Models.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -23,14 +22,12 @@ namespace JagerGroupIS.DatabaseContext
 
         public virtual DbSet<TrackingMessage> TrackingMessages { get; set; }
 
-        public ConnectionString ConnectionString { get; set; }
+        public static string ConnectionString;
 
         ILoggerFactory loggerFactory { get; set; }
 
-        public DiscordBotDbContext(ConnectionString ConnectionString)
+        public DiscordBotDbContext()
         {
-            this.ConnectionString = ConnectionString;
-
             loggerFactory = LoggerFactory.Create(builder => { builder.AddConsole(); });
 
             Database.EnsureCreated();
@@ -42,7 +39,7 @@ namespace JagerGroupIS.DatabaseContext
 
             if (optionsBuilder.IsConfigured == false)
             {
-                optionsBuilder.UseNpgsql(ConnectionString.ToString())
+                optionsBuilder.UseNpgsql(ConnectionString)
                               .UseLoggerFactory(loggerFactory)
                               .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             }

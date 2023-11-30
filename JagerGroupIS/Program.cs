@@ -1,6 +1,6 @@
 using JagerGroupIS.DatabaseContext;
 using JagerGroupIS.DiscordBot;
-using JagerGroupIS.Models.Config;
+using Microsoft.Extensions.Configuration;
 using System.Globalization;
 using System.Linq;
 
@@ -8,8 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.Configure<ConnectionString>(builder.Configuration.GetSection("ConnectionStrings"));
-builder.Services.Configure<DiscordToken>(builder.Configuration.GetSection("DiscordToken"));
+//builder.Services.Configure<ConnectionString>(builder.Configuration.GetSection("ConnectionStrings"));
+//builder.Services.Configure<DiscordToken>(builder.Configuration.GetSection("DiscordToken"));
+
+DiscordBotDbContext.ConnectionString = builder.Configuration.GetValue<string>("ConnectStrings");
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
