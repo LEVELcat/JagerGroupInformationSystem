@@ -40,7 +40,7 @@ namespace JagerGroupIS.DatabaseContext
             if (optionsBuilder.IsConfigured == false)
             {
                 optionsBuilder.UseNpgsql(ConnectionString)
-                              .UseLoggerFactory(loggerFactory)
+                              //.UseLoggerFactory(loggerFactory)
                               .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             }
 

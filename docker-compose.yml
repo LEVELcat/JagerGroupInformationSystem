@@ -25,8 +25,8 @@ services:
       context: .
       dockerfile: JagerGroupIS/Dockerfile
     environment:
-      LANG: ru_RU.UTF-8
-      LC_ALL: ru_RU.UTF-8
+      # LANG: ru_RU.UTF-8
+      # LC_ALL: ru_RU.UTF-8
       TZ: Europe/Moscow
     networks:
       - psnet

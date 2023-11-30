@@ -16,6 +16,8 @@ using JagerGroupIS.DatabaseContext;
 using JagerGroupIS.DiscordBot.Services;
 using DSharpPlus.SlashCommands;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace JagerGroupIS.DiscordBot
 {
@@ -31,18 +33,28 @@ namespace JagerGroupIS.DiscordBot
         {
             try
             {
-                //TODO: Put Into Config file
+                var logPath = Path.Combine(AppContext.BaseDirectory, "logs\\log.txt");
+
+                var serilogConfig = new LoggerConfiguration().WriteTo.File(logPath, rollingInterval: RollingInterval.Day, rollOnFileSizeLimit: true)
+                                                             .WriteTo.Console()
+                                                             .WriteTo.Debug()
+                                                             .CreateLogger();
+
+                var logFactory = new LoggerFactory().AddSerilog(serilogConfig);
+
                 var config = new DiscordConfiguration()
                 {
                     Token = configurationManager.GetValue<string>("DiscordToken"),
 
                     TokenType = TokenType.Bot,
                     Intents = DiscordIntents.All,
-                    MinimumLogLevel = Microsoft.Extensions.Logging.LogLevel.Debug,
-                    LogTimestampFormat = "MMM dd yyyy - hh:mm:ss tt"
+                    MinimumLogLevel = LogLevel.Debug,
+                    //LogTimestampFormat = "MMM dd yyyy - hh:mm:ss tt",
+                    //LoggerFactory = logFactory
                 };
 
                 var discord = new DiscordClient(config);
+
 
                 IServiceCollection serviceCollection = new ServiceCollection();
 
@@ -60,9 +72,7 @@ namespace JagerGroupIS.DiscordBot
 
                 discord.UseInteractivity(new InteractivityConfiguration()
                 {
-
                 });
-
 
                 discord.ComponentInteractionCreated += RegistrateInteractionEvent(services);
 
