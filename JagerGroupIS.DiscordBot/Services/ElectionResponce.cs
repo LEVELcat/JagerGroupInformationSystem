@@ -147,9 +147,9 @@ namespace JagerGroupIS.DiscordBot.Services
                             });
                             await dbContext.SaveChangesAsync();
                         }
-                        logger.LogDebug("ER#" + inde++);
                         else
                         {
+                            logger.LogDebug("ER#" + inde++);
                             await dbContext.Votes.AddAsync(new Vote()
                             {
                                 ElectionID = election.ID,
