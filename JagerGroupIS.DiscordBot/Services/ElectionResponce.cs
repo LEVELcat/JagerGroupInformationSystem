@@ -289,7 +289,7 @@ namespace JagerGroupIS.DiscordBot.Services
 
                 //var build = new DiscordInteractionResponseBuilder(messageBuilder);
 
-                await componentInteraction.Interaction.CreateResponseAsync(InteractionResponseType.Pong, new DiscordInteractionResponseBuilder(new DiscordFollowupMessageBuilder().WithContent("Обработано").AsEphemeral().SuppressNotifications()));
+                await componentInteraction.Interaction.CreateResponseAsync(InteractionResponseType.AutoCompleteResult, new DiscordInteractionResponseBuilder(new DiscordFollowupMessageBuilder().WithContent("Обработано").AsEphemeral().SuppressNotifications()));
 
                 componentInteraction.Message.ModifyAsync(messageBuilder);
 
