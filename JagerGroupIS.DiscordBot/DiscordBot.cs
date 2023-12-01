@@ -51,6 +51,7 @@ namespace JagerGroupIS.DiscordBot
                     MinimumLogLevel = LogLevel.Debug,
                     //LogTimestampFormat = "MMM dd yyyy - hh:mm:ss tt",
                     //LoggerFactory = logFactory
+                    UseRelativeRatelimit = false
                 };
 
                 var discord = new DiscordClient(config);
