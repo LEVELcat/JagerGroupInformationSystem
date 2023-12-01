@@ -285,9 +285,10 @@ namespace JagerGroupIS.DiscordBot.Services
 
                 messageBuilder.Embed = embedBuilder;
 
-                componentInteraction.Message.ModifyAsync(messageBuilder);
+                await componentInteraction.Message.ModifyAsync(messageBuilder);
 
-                await componentInteraction.Interaction.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder() { Content = "Голос принят", IsEphemeral = true});
+                await componentInteraction.Interaction.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder().WithContent("Голос принят")
+                                                                                                                     .AsEphemeral());
 
                 //GC.Collect();
             }
