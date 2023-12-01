@@ -219,9 +219,9 @@ namespace JagerGroupIS.DiscordBot.Services
                                    (Array.Exists(rolesId, r => excludedRolesID.Contains(r)) == false)
                                select new { Id = unchecked((long)m.Value.Id), m.Value.Mention }).ToList();
 
-                var votes = await (from v in dbContext.Votes
-                                   orderby v.VoteTimeUTC
-                                   group v by v.UserID).ToArrayAsync();
+                var votes = (from v in election.Votes
+                             orderby v.VoteTimeUTC
+                             group v by v.UserID).ToArray();
 
                 if (election.Settings.HasFlag(ElectionSettingsBitMask.AgreeList))
                 {
