@@ -285,7 +285,7 @@ namespace JagerGroupIS.DiscordBot.Services
 
                 messageBuilder.Embed = embedBuilder;
 
-                await componentInteraction.Interaction.CreateResponseAsync(InteractionResponseType.UpdateMessage);
+                await componentInteraction.Interaction.CreateResponseAsync(InteractionResponseType.AutoCompleteResult);
 
                 componentInteraction.Message.ModifyAsync(messageBuilder);
                 GC.Collect();
