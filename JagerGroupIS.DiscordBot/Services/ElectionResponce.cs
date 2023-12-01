@@ -287,9 +287,9 @@ namespace JagerGroupIS.DiscordBot.Services
 
                 await componentInteraction.Message.ModifyAsync(messageBuilder);
 
-                await componentInteraction.Interaction.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder().WithContent("Голос принят")
-                                                                                                                     .AsEphemeral()
-                                                                                                                     .SuppressNotifications());
+                await componentInteraction.Interaction.CreateResponseAsync(InteractionResponseType.UpdateMessage);
+
+                componentInteraction.Message.ModifyAsync(messageBuilder);
 
                 //GC.Collect();
             }
