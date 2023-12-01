@@ -285,10 +285,11 @@ namespace JagerGroupIS.DiscordBot.Services
 
                 messageBuilder.Embed = embedBuilder;
 
-                await componentInteraction.Interaction.CreateResponseAsync(InteractionResponseType.AutoCompleteResult);
-
                 componentInteraction.Message.ModifyAsync(messageBuilder);
-                GC.Collect();
+
+                await componentInteraction.Interaction.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder() { Content = "Голос принят", IsEphemeral = true});
+
+                //GC.Collect();
             }
             catch (Exception e)
             {
