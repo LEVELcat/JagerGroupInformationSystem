@@ -285,9 +285,10 @@ namespace JagerGroupIS.DiscordBot.Services
                 }
 
                 messageBuilder.Embed = embedBuilder;
-                 
-                await componentInteraction.Interaction.CreateResponseAsync(InteractionResponseType.UpdateMessage, new DiscordInteractionResponseBuilder(messageBuilder));
 
+                await componentInteraction.Interaction.CreateResponseAsync(InteractionResponseType.UpdateMessage);
+
+                componentInteraction.Message.ModifyAsync(messageBuilder);
                 GC.Collect();
             }
             catch (Exception e)
