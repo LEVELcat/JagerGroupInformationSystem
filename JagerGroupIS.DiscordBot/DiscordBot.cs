@@ -33,15 +33,6 @@ namespace JagerGroupIS.DiscordBot
         {
             try
             {
-                var logPath = Path.Combine(AppContext.BaseDirectory, "logs\\log.txt");
-
-                var serilogConfig = new LoggerConfiguration().WriteTo.File(logPath, rollingInterval: RollingInterval.Day, rollOnFileSizeLimit: true)
-                                                             .WriteTo.Console()
-                                                             .WriteTo.Debug()
-                                                             .CreateLogger();
-
-                var logFactory = new LoggerFactory().AddSerilog(serilogConfig);
-
                 var config = new DiscordConfiguration()
                 {
                     Token = configurationManager.GetValue<string>("DiscordToken"),
@@ -50,8 +41,6 @@ namespace JagerGroupIS.DiscordBot
                     Intents = DiscordIntents.All,
                     MinimumLogLevel = LogLevel.Debug,
                     //LogTimestampFormat = "MMM dd yyyy - hh:mm:ss tt",
-                    //LoggerFactory = logFactory
-                    //UseRelativeRatelimit = false
                 };
 
                 var discord = new DiscordClient(config);

@@ -7,14 +7,13 @@ using JagerGroupIS.Models.Database;
 using JagerGroupIS.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 
 namespace JagerGroupIS.DiscordBot.Services
 {
     public class ElectionResponce
     {
         DiscordBotDbContext dbContext { get; }
-
-        ILogger logger { get; }
 
         public ElectionResponce(DiscordBotDbContext dbContext)
         {
@@ -23,6 +22,8 @@ namespace JagerGroupIS.DiscordBot.Services
 
         public async Task Responce(ComponentInteractionCreateEventArgs componentInteraction)
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             try
             {
                 var guidIDlong = unchecked((long)componentInteraction.Guild.Id);
@@ -288,11 +289,16 @@ namespace JagerGroupIS.DiscordBot.Services
 
                 componentInteraction.Interaction.CreateResponseAsync(InteractionResponseType.UpdateMessage, new DiscordInteractionResponseBuilder(messageBuilder));
 
+                stopwatch.Stop();
+                DiscordBot.Client.Logger.LogDebug($"Election response time {stopwatch.ElapsedMilliseconds} ms");
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
                 Console.WriteLine(e.ToString());
+
+                stopwatch.Stop();
+                DiscordBot.Client.Logger.LogDebug($"Election response time {stopwatch.ElapsedMilliseconds} ms");
             }
         }
     }
