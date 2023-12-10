@@ -219,7 +219,8 @@ namespace JagerGroupIS.DiscordBot.Services
                                    (Array.Exists(rolesId, r => excludedRolesID.Contains(r)) == false)
                                select new { Id = unchecked((long)m.Value.Id), m.Value.Mention }).ToList();
 
-                var votes = (from v in election.Votes
+                var votes = (from v in dbContext.Votes
+                             where v.ElectionID == election.ID
                              orderby v.VoteTimeUTC
                              group v by v.UserID).ToArray();
 
@@ -285,15 +286,8 @@ namespace JagerGroupIS.DiscordBot.Services
 
                 messageBuilder.Embed = embedBuilder;
 
-                //await componentInteraction.Message.ModifyAsync(messageBuilder);
+                componentInteraction.Interaction.CreateResponseAsync(InteractionResponseType.UpdateMessage, new DiscordInteractionResponseBuilder(messageBuilder));
 
-                //var build = new DiscordInteractionResponseBuilder(messageBuilder);
-
-                await componentInteraction.Interaction.CreateResponseAsync(InteractionResponseType.AutoCompleteResult, new DiscordInteractionResponseBuilder(new DiscordFollowupMessageBuilder().WithContent("Обработано").AsEphemeral().SuppressNotifications()));
-
-                componentInteraction.Message.ModifyAsync(messageBuilder);
-
-                //GC.Collect();
             }
             catch (Exception e)
             {
