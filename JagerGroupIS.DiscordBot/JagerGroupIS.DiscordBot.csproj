@@ -24,8 +24,4 @@
     <ProjectReference Include="..\JagerGroupIS.Models\JagerGroupIS.Models.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Modules\ApplicationToJoin\" />
-  </ItemGroup>
-
 </Project>

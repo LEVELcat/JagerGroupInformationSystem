@@ -18,6 +18,7 @@ using DSharpPlus.SlashCommands;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using JagerGroupIS.DiscordBot.Modules.ApplicationToJoin;
 
 namespace JagerGroupIS.DiscordBot
 {
@@ -53,16 +54,15 @@ namespace JagerGroupIS.DiscordBot
 
                 var services = serviceCollection.BuildServiceProvider();
 
-                var shash = discord.UseSlashCommands(new SlashCommandsConfiguration()
+                var slash = discord.UseSlashCommands(new SlashCommandsConfiguration()
                 {
                     Services = services
                 });
 
-                shash.RegisterCommands<ElectionModule>();
+                slash.RegisterCommands<ApplicationToJoinModule>();
+                slash.RegisterCommands<ElectionModule>();
 
-                discord.UseInteractivity(new InteractivityConfiguration()
-                {
-                });
+                discord.UseInteractivity(new InteractivityConfiguration());
 
                 discord.ComponentInteractionCreated += RegistrateInteractionEvent(services);
 
