@@ -233,14 +233,17 @@ namespace JagerGroupIS.DiscordBot.Services
                 //             orderby v.VoteTimeUTC
                 //             group v by v.UserID).ToArray();
 
-                lastVote.User = user;
+                var allVotes = election.Votes.ToArray().AsEnumerable();
 
-                var allVotes = election.Votes.ToArray().Append(lastVote);
+                if (lastVote != null && user != null)
+                {
+                    lastVote.User = user;
+                    allVotes.Append(lastVote);
+                }
 
                 var votes = (from v in allVotes
                              orderby v.VoteTimeUTC
                              group v by v.UserID);
-
 
                 if (election.Settings.HasFlag(ElectionSettingsBitMask.AgreeList))
                 {
