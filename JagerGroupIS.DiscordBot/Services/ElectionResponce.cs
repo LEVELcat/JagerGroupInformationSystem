@@ -130,7 +130,7 @@ namespace JagerGroupIS.DiscordBot.Services
                         }
                         break;
                     case "EL_UPDATE":
-                         
+                        lastVote = null;
                         break;
                     case "EL_DAYOFF":
                         try
@@ -238,7 +238,6 @@ namespace JagerGroupIS.DiscordBot.Services
                 if (lastVote != null && user != null)
                 {
                     lastVote.User = user;
-                    //lastVote.UserID = user.ID;
                     allVotes = allVotes.Append(lastVote);
                 }
 
