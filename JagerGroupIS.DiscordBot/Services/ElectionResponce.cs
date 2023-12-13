@@ -220,9 +220,7 @@ namespace JagerGroupIS.DiscordBot.Services
                                    (Array.Exists(rolesId, r => excludedRolesID.Contains(r)) == false)
                                select new { Id = unchecked((long)m.Value.Id), m.Value.Mention }).ToList();
 
-                await dbContext.Database.CommitTransactionAsync();
-
-                var votes = (from v in dbContext.Votes
+                var votes = (from v in election.Votes
                              where v.ElectionID == election.ID
                              orderby v.ID
                              group v by v.UserID).ToArray();
@@ -236,9 +234,6 @@ namespace JagerGroupIS.DiscordBot.Services
                                    join m in members on vL.User.DiscordUserID equals m.Id
                                    select new { m.Id, m.Mention }).ToArray();
 
-                    foreach (var v in yesList)
-                        members.RemoveAll(m => m.Id == v.Id);
-
                     embedBuilder.Fields[columnIndex].Name = "<:emoji_134:941666424324239430> " + yesList.Length;
 
                     for (int i = 0; i < maxRows; i++)
@@ -247,6 +242,9 @@ namespace JagerGroupIS.DiscordBot.Services
                                                                                                     .Take(mentionsInField)
                                                                                                     .Select(x => x.Mention));
                     }
+
+                    foreach (var v in yesList)
+                        members.RemoveAll(m => m.Id == v.Id);
 
                     columnIndex++;
                 }
@@ -259,9 +257,6 @@ namespace JagerGroupIS.DiscordBot.Services
                                   orderby vL.ID
                                   join m in members on vL.User.DiscordUserID equals m.Id
                                   select new { m.Id, m.Mention }).ToArray();
-                     
-                    foreach (var v in noList)
-                        members.RemoveAll(m => m.Id == v.Id);
 
                     embedBuilder.Fields[columnIndex].Name = "<:1_:941666407513473054> " + noList.Length;
 
@@ -271,6 +266,10 @@ namespace JagerGroupIS.DiscordBot.Services
                                                                                                    .Take(mentionsInField)
                                                                                                    .Select(x => x.Mention));
                     }
+
+                    foreach (var v in noList)
+                        members.RemoveAll(m => m.Id == v.Id);
+
                     columnIndex++;
                 }
 
