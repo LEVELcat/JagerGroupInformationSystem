@@ -238,8 +238,8 @@ namespace JagerGroupIS.DiscordBot.Services
                 if (lastVote != null && user != null)
                 {
                     lastVote.User = user;
-                    lastVote.UserID = user.ID;
-                    allVotes.Append(lastVote);
+                    //lastVote.UserID = user.ID;
+                    allVotes = allVotes.Append(lastVote);
                 }
 
                 var votes = (from v in allVotes
