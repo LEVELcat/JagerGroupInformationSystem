@@ -222,7 +222,7 @@ namespace JagerGroupIS.DiscordBot.Services
 
                 var votes = (from v in dbContext.Votes
                              where v.ElectionID == election.ID
-                             orderby v.VoteTimeUTC
+                             orderby v.ID
                              group v by v.UserID).ToArray();
 
                 if (election.Settings.HasFlag(ElectionSettingsBitMask.AgreeList))
@@ -230,14 +230,14 @@ namespace JagerGroupIS.DiscordBot.Services
                     var yesList = (from v in votes
                                    let vL = v.Last()
                                    where vL.VoteType == VoteType.Agree
-                                   orderby vL.VoteTimeUTC
+                                   orderby vL.ID
                                    join m in members on vL.User.DiscordUserID equals m.Id
                                    select new { m.Id, m.Mention }).ToArray();
 
                     foreach (var v in yesList)
                         members.RemoveAll(m => m.Id == v.Id);
 
-                    embedBuilder.Fields[columnIndex].Name = "<:emoji_134:941666424324239430> " + yesList.Count();
+                    embedBuilder.Fields[columnIndex].Name = "<:emoji_134:941666424324239430> " + yesList.Length;
 
                     for (int i = 0; i < maxRows; i++)
                     {
@@ -254,7 +254,7 @@ namespace JagerGroupIS.DiscordBot.Services
                     var noList = (from v in votes
                                   let vL = v.Last()
                                   where vL.VoteType == VoteType.Reject
-                                  orderby vL.VoteTimeUTC
+                                  orderby vL.ID
                                   join m in members on vL.User.DiscordUserID equals m.Id
                                   select new { m.Id, m.Mention }).ToArray();
                      
