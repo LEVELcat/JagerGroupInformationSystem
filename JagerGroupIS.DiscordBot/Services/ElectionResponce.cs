@@ -258,6 +258,7 @@ namespace JagerGroupIS.DiscordBot.Services
                                   join m in members on vL.User.DiscordUserID equals m.Id
                                   select new { m.Id, m.Mention }).ToArray();
 
+
                     embedBuilder.Fields[columnIndex].Name = "<:1_:941666407513473054> " + noList.Length;
 
                     for (int i = 0; i < maxRows; i++)
