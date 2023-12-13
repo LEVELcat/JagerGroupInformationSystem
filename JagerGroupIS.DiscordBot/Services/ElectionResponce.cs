@@ -233,6 +233,8 @@ namespace JagerGroupIS.DiscordBot.Services
                 //             orderby v.VoteTimeUTC
                 //             group v by v.UserID).ToArray();
 
+                lastVote.User = user;
+
                 var allVotes = election.Votes.ToArray().Append(lastVote);
 
                 var votes = (from v in allVotes
