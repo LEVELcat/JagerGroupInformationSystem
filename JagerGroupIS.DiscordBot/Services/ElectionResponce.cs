@@ -75,50 +75,58 @@ namespace JagerGroupIS.DiscordBot.Services
                     case "EL_APROVE":
                         if (lastVote == null || lastVote.VoteType == VoteType.Reject || lastVote.VoteType == VoteType.None)
                         {
-                            await dbContext.Votes.AddAsync(new Vote()
+                            lastVote = new Vote()
                             {
                                 ElectionID = election.ID,
                                 VoteTimeUTC = DateTime.UtcNow,
                                 VoteType = VoteType.Agree,
                                 UserID = user.ID
-                            });
-                            await dbContext.SaveChangesAsync();
+                            };
+
+                            await dbContext.Votes.AddAsync(lastVote);
+                            dbContext.SaveChangesAsync();
                         }
                         else
                         {
-                            await dbContext.Votes.AddAsync(new Vote()
+                            lastVote = new Vote()
                             {
                                 ElectionID = election.ID,
                                 VoteTimeUTC = DateTime.UtcNow,
                                 VoteType = VoteType.None,
                                 UserID = user.ID
-                            });
-                            await dbContext.SaveChangesAsync();
+                            };
+
+                            await dbContext.Votes.AddAsync(lastVote);
+                            dbContext.SaveChangesAsync();
                         }
                         break;
                     case "EL_DENY":
                          
                         if (lastVote == null || lastVote.VoteType == VoteType.Agree || lastVote.VoteType == VoteType.None)
                         {
-                            await dbContext.Votes.AddAsync(new Vote()
+                            lastVote = new Vote()
                             {
                                 ElectionID = election.ID,
                                 VoteTimeUTC = DateTime.UtcNow,
                                 VoteType = VoteType.Reject,
                                 UserID = user.ID
-                            });
-                            await dbContext.SaveChangesAsync();
+                            };
+
+                            await dbContext.Votes.AddAsync(lastVote);
+                            dbContext.SaveChangesAsync();
                         }
                         else
                         {
-                            await dbContext.Votes.AddAsync(new Vote()
+                            lastVote = new Vote()
                             {
                                 ElectionID = election.ID,
                                 VoteTimeUTC = DateTime.UtcNow,
                                 VoteType = VoteType.None,
                                 UserID = user.ID
-                            });
-                            await dbContext.SaveChangesAsync();
+                            };
+
+                            await dbContext.Votes.AddAsync(lastVote);
+                            dbContext.SaveChangesAsync();
                         }
                         break;
                     case "EL_UPDATE":
@@ -220,17 +228,24 @@ namespace JagerGroupIS.DiscordBot.Services
                                    (Array.Exists(rolesId, r => excludedRolesID.Contains(r)) == false)
                                select new { Id = unchecked((long)m.Value.Id), m.Value.Mention }).ToList();
 
-                var votes = (from v in election.Votes
-                             where v.ElectionID == election.ID
-                             orderby v.ID
-                             group v by v.UserID).ToArray();
+                //var votes = (from v in election.Votes
+                //             where v.ElectionID == election.ID
+                //             orderby v.VoteTimeUTC
+                //             group v by v.UserID).ToArray();
+
+                var allVotes = election.Votes.ToArray().Append(lastVote);
+
+                var votes = (from v in allVotes
+                             orderby v.VoteTimeUTC
+                             group v by v.UserID);
+
 
                 if (election.Settings.HasFlag(ElectionSettingsBitMask.AgreeList))
                 {
                     var yesList = (from v in votes
                                    let vL = v.Last()
                                    where vL.VoteType == VoteType.Agree
-                                   orderby vL.ID
+                                   orderby vL.VoteTimeUTC
                                    join m in members on vL.User.DiscordUserID equals m.Id
                                    select new { m.Id, m.Mention }).ToArray();
 
@@ -254,7 +269,7 @@ namespace JagerGroupIS.DiscordBot.Services
                     var noList = (from v in votes
                                   let vL = v.Last()
                                   where vL.VoteType == VoteType.Reject
-                                  orderby vL.ID
+                                  orderby vL.VoteTimeUTC
                                   join m in members on vL.User.DiscordUserID equals m.Id
                                   select new { m.Id, m.Mention }).ToArray();
 
