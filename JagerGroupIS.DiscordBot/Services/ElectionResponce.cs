@@ -220,7 +220,7 @@ namespace JagerGroupIS.DiscordBot.Services
                                    (Array.Exists(rolesId, r => excludedRolesID.Contains(r)) == false)
                                select new { Id = unchecked((long)m.Value.Id), m.Value.Mention }).ToList();
 
-                var votes = (from v in election.Votes
+                var votes = (from v in dbContext.Votes
                              where v.ElectionID == election.ID
                              orderby v.ID
                              group v by v.UserID).ToArray();
