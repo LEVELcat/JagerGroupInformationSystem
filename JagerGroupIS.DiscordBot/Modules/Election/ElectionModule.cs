@@ -15,7 +15,7 @@ namespace JagerGroupIS.DiscordBot.Modules.Election
     [SlashCommandPermissions(DSharpPlus.Permissions.Administrator)]
     public class ElectionModule : ApplicationCommandModule
     {
-        DiscordBotDbContext dbContext { get; }
+        readonly DiscordBotDbContext dbContext;
         
         public ElectionModule(DiscordBotDbContext dbContext)
         {
@@ -26,6 +26,41 @@ namespace JagerGroupIS.DiscordBot.Modules.Election
         public async Task CreateElectionAsync(InteractionContext context)
         {
             new ElectionFactory(dbContext).CreateElectionAsync(context);
+        }
+
+        //[SlashCommand("история", "получить историю по голосованию")]
+        [ContextMenu(DSharpPlus.ApplicationCommandType.MessageContextMenu, "история голосований")]
+        public async Task GetElectionHistory(ContextMenuContext context)
+        {
+            new ElectionHistory(dbContext).GetHistoryOfElection(context);
+        }
+    }
+
+    public class ElectionHistory
+    {
+        readonly DiscordBotDbContext dbContext;
+
+        public ElectionHistory(DiscordBotDbContext dbContext)
+        {
+            this.dbContext= dbContext;
+        }
+
+        public async Task GetHistoryOfElection(ContextMenuContext context)
+        {
+            var guildId = unchecked((long)context.Guild.Id);
+            var messageId = unchecked((long)context.TargetMessage.Id);
+
+            if (dbContext.Elections.FirstOrDefault(x => x.GuildID == guildId && x.MessageID == messageId) is not Models.Database.Election election)
+            {
+                context.FollowUpAsync(new DiscordFollowupMessageBuilder().WithContent("Голосование не найдено").AsEphemeral());
+                return;
+            }
+
+            var values = election.Votes.Select(x => $"{x.User.DiscordUserID}\t{x.VoteTypeString}\t{x.VoteTimeUTC}");
+
+            var result = string.Join("\n", values);
+
+            context.FollowUpAsync(new DiscordFollowupMessageBuilder().WithContent(result).AsEphemeral());
         }
     }
 }

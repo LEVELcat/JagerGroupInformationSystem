@@ -20,6 +20,9 @@ namespace JagerGroupIS.Models.Database
         [Column("VoteType")]
         public VoteType VoteType { get; set; }
 
+        [NotMapped]
+        public string VoteTypeString { get => VoteType.ToString(); }
+
         [Column("VoteTimeUTC")]
         public DateTime VoteTimeUTC { get; set; }
 
