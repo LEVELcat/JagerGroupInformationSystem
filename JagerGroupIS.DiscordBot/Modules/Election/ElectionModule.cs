@@ -3,6 +3,7 @@ using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using JagerGroupIS.DatabaseContext;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +30,7 @@ namespace JagerGroupIS.DiscordBot.Modules.Election
         }
 
         //[SlashCommand("история", "получить историю по голосованию")]
-        [ContextMenu(DSharpPlus.ApplicationCommandType.MessageContextMenu, "история голосований")]
+        [ContextMenu(DSharpPlus.ApplicationCommandType.MessageContextMenu, "election history")]
         public async Task GetElectionHistory(ContextMenuContext context)
         {
             new ElectionHistory(dbContext).GetHistoryOfElection(context);
@@ -50,7 +51,7 @@ namespace JagerGroupIS.DiscordBot.Modules.Election
             var guildId = unchecked((long)context.Guild.Id);
             var messageId = unchecked((long)context.TargetMessage.Id);
 
-            if (dbContext.Elections.FirstOrDefault(x => x.GuildID == guildId && x.MessageID == messageId) is not Models.Database.Election election)
+            if (await dbContext.Elections.FirstOrDefaultAsync(x => x.GuildID == guildId && x.MessageID == messageId) is not Models.Database.Election election)
             {
                 context.FollowUpAsync(new DiscordFollowupMessageBuilder().WithContent("Голосование не найдено").AsEphemeral());
                 return;
