@@ -30,9 +30,10 @@ namespace JagerGroupIS.DiscordBot.Modules.Election
         }
 
         //[SlashCommand("история", "получить историю по голосованию")]
-        [ContextMenu(DSharpPlus.ApplicationCommandType.MessageContextMenu, "election history")]
+        [ContextMenu(DSharpPlus.ApplicationCommandType.MessageContextMenu, "история голосования")]
         public async Task GetElectionHistory(ContextMenuContext context)
         {
+            context.DeferAsync(true);
             new ElectionHistory(dbContext).GetHistoryOfElection(context);
         }
     }
@@ -53,11 +54,11 @@ namespace JagerGroupIS.DiscordBot.Modules.Election
 
             if (await dbContext.Elections.FirstOrDefaultAsync(x => x.GuildID == guildId && x.MessageID == messageId) is not Models.Database.Election election)
             {
-                context.FollowUpAsync(new DiscordFollowupMessageBuilder().WithContent("Голосование не найдено").AsEphemeral());
+                context.Interaction.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder().WithContent("Голосование не найдено").AsEphemeral());
                 return;
             }
 
-            var values = election.Votes.Select(x => $"{x.User.DiscordUserID}\t{x.VoteTypeString}\t{x.VoteTimeUTC}");
+            var values = election.Votes.OrderBy(x => x.VoteTimeUTC).Select(x => $"<@{(unchecked((ulong)x.User.DiscordUserID))}>\t{x.VoteTypeString}\t{x.VoteTime}");
 
             var result = string.Join("\n", values);
 
