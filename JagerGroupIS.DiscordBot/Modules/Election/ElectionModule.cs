@@ -62,7 +62,7 @@ namespace JagerGroupIS.DiscordBot.Modules.Election
 
                 var values = election.Votes.OrderBy(x => x.VoteTimeUTC).Select(x => $"<@{(unchecked((ulong)x.User.DiscordUserID))}>\t{x.VoteTypeString}\t{x.VoteTime}");
 
-                var result = string.Join("\n", values.TakeLast(40));
+                var result = string.Join("\n", values.TakeLast(20));
 
                 context.FollowUpAsync(new DiscordFollowupMessageBuilder().WithContent(result).AsEphemeral());
             }
