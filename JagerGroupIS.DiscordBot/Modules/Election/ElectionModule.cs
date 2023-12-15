@@ -49,20 +49,28 @@ namespace JagerGroupIS.DiscordBot.Modules.Election
 
         public async Task GetHistoryOfElection(ContextMenuContext context)
         {
-            var guildId = unchecked((long)context.Guild.Id);
-            var messageId = unchecked((long)context.TargetMessage.Id);
-
-            if (await dbContext.Elections.FirstOrDefaultAsync(x => x.GuildID == guildId && x.MessageID == messageId) is not Models.Database.Election election)
+            try
             {
-                context.Interaction.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder().WithContent("Голосование не найдено").AsEphemeral());
-                return;
+                var guildId = unchecked((long)context.Guild.Id);
+                var messageId = unchecked((long)context.TargetMessage.Id);
+
+                if (await dbContext.Elections.FirstOrDefaultAsync(x => x.GuildID == guildId && x.MessageID == messageId) is not Models.Database.Election election)
+                {
+                    context.Interaction.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder().WithContent("Голосование не найдено").AsEphemeral());
+                    return;
+                }
+
+                var values = election.Votes.OrderBy(x => x.VoteTimeUTC).Select(x => $"<@{(unchecked((ulong)x.User.DiscordUserID))}>\t{x.VoteTypeString}\t{x.VoteTime}");
+
+                var result = string.Join("\n", values);
+
+                context.FollowUpAsync(new DiscordFollowupMessageBuilder().WithContent(result).AsEphemeral());
+            }
+            catch (Exception ex)
+            {
+                context.FollowUpAsync(new DiscordFollowupMessageBuilder().WithContent(ex.Message + "\n" + ex.ToString()).AsEphemeral());
             }
 
-            var values = election.Votes.OrderBy(x => x.VoteTimeUTC).Select(x => $"<@{(unchecked((ulong)x.User.DiscordUserID))}>\t{x.VoteTypeString}\t{x.VoteTime}");
-
-            var result = string.Join("\n", values);
-
-            context.FollowUpAsync(new DiscordFollowupMessageBuilder().WithContent(result).AsEphemeral());
         }
     }
 }
