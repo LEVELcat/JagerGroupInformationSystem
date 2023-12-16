@@ -121,7 +121,7 @@ namespace JagerGroupIS.DiscordBot.Services
                             await dbContext.Votes.AddAsync(lastVote);
                             dbContext.SaveChangesAsync();
 
-                            componentInteraction.Interaction.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder().WithContent("Ваш голос ПРОТИВ отменён").AsEphemeral().AddMention(new UserMention(componentInteraction.User)));
+                            componentInteraction.Interaction.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder().WithContent("Ваш голос ПРОТИВ учтен").AsEphemeral().AddMention(new UserMention(componentInteraction.User)));
                         }
                         else
                         {
