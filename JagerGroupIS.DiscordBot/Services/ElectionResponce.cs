@@ -26,6 +26,8 @@ namespace JagerGroupIS.DiscordBot.Services
             stopwatch.Start();
             try
             {
+                componentInteraction.Interaction.DeferAsync(true);
+
                 var guidIDlong = unchecked((long)componentInteraction.Guild.Id);
                 var channelIDlong = unchecked((long)componentInteraction.Channel.Id);
                 var messageIDlong = unchecked((long)componentInteraction.Message.Id);
@@ -85,6 +87,8 @@ namespace JagerGroupIS.DiscordBot.Services
 
                             await dbContext.Votes.AddAsync(lastVote);
                             dbContext.SaveChangesAsync();
+
+                            componentInteraction.Interaction.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder().WithContent("Ваш голос ЗА учтен").AsEphemeral());
                         }
                         else
                         {
@@ -98,6 +102,8 @@ namespace JagerGroupIS.DiscordBot.Services
 
                             await dbContext.Votes.AddAsync(lastVote);
                             dbContext.SaveChangesAsync();
+
+                            componentInteraction.Interaction.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder().WithContent("Ваш прошлый голос отменён").AsEphemeral());
                         }
                         break;
                     case "EL_DENY":
@@ -114,6 +120,8 @@ namespace JagerGroupIS.DiscordBot.Services
 
                             await dbContext.Votes.AddAsync(lastVote);
                             dbContext.SaveChangesAsync();
+
+                            componentInteraction.Interaction.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder().WithContent("Ваш голос ПРОТИВ отменён").AsEphemeral());
                         }
                         else
                         {
@@ -127,10 +135,13 @@ namespace JagerGroupIS.DiscordBot.Services
 
                             await dbContext.Votes.AddAsync(lastVote);
                             dbContext.SaveChangesAsync();
+
+                            componentInteraction.Interaction.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder().WithContent("Ваш прошлый голос отменён").AsEphemeral());
                         }
                         break;
                     case "EL_UPDATE":
                         lastVote = null;
+                        componentInteraction.Interaction.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder().WithContent("Обновление списка голосующих для исправления возможных ошибок").AsEphemeral());
                         break;
                     case "EL_DAYOFF":
                         try
@@ -309,7 +320,9 @@ namespace JagerGroupIS.DiscordBot.Services
 
                 messageBuilder.Embed = embedBuilder;
 
-                componentInteraction.Interaction.CreateResponseAsync(InteractionResponseType.UpdateMessage, new DiscordInteractionResponseBuilder(messageBuilder));
+                //componentInteraction.Interaction.CreateResponseAsync(InteractionResponseType.UpdateMessage, new DiscordInteractionResponseBuilder(messageBuilder));
+
+                componentInteraction.Message.ModifyAsync(messageBuilder);
 
                 stopwatch.Stop();
                 DiscordBot.Client.Logger.LogDebug($"Election response time {stopwatch.ElapsedMilliseconds} ms");
